@@ -1,0 +1,91 @@
+import pyttsx3
+from PyPDF2 import *
+
+blviet = [["Cuộc chiến Disney", "DW.pdf"],
+         ["Những người khổng lồ trong giới kinh doanh", "NKLGKD.pdf"]]
+bleng = [["Theory and Practice in the Bioarchaeology of Care", "TaPBoC.pdf"],
+        ["Theory of Evolutionary Computation", "ToEC.pdf"], ["Theory of Information and its Value", "ToIaV.pdf"]]
+
+bot = pyttsx3.init()
+voices = bot.getProperty("voices")
+
+print("Danh sách ID giọng hiện có:")
+for voice in voices:
+       print (f"{voice.name}")
+
+a = int(input("Chọn ID giọng (theo thứ tự): "))
+bot.setProperty("voice", voices[a-1].id)
+
+
+
+print("Danh sách tốc độ đọc hiện có:"
+     "\n\tNhanh."
+     "\n\tChuẩn."
+     "\n\tChậm.")
+speed = input("Chọn tốc độ đọc mong muốn: ")
+if speed == "Nhanh":
+   bot.setProperty("rate", 300)
+elif speed == "Chuẩn":
+   bot.setProperty("rate", 200)
+elif speed == "Chậm":
+   bot.setProperty("rate", 100)
+
+
+print("Danh sách audiobook hiện có:"
+     "\n\tAudiobook tiếng việt [Mã: 10]:"
+     "\n\t\tCuộc chiến Disney."
+     "\n\t\tNhững người khổng lồ trong giới kinh doanh."
+     "\n\tAudiobook tiếng anh [Mã: 20]:"
+     "\n\t\tTheory and Practice in the Bioarchaeology of Care."
+     "\n\t\tTheory of Evolutionary Computation."
+     "\n\t\tTheory of Information and its Value.")
+
+b = int(input("Nhập mã danh sách audiobook: "))
+m = input("Nhập tên sách: ")
+if b == 10:
+   d = blviet.__len__()
+   for i in range(d):
+       if m == blviet[i][0]:
+           c = blviet[i][1]
+           book = open(c, "rb")
+           reader = PdfReader(book)
+           nums = len(reader.pages)
+           pg = int(input("Nhập trang bạn muốn bắt đầu đọc: "))
+           current_page = pg - 1
+
+           while current_page < nums:
+               page = reader.pages[current_page]
+               text = page.extract_text()
+               bot.say(text)
+               bot.runAndWait()
+               stp = int(input("Muốn dừng đọc thì nhấn số 0: "))
+               if stp == 0 or current_page == nums:
+                   bot.stop()
+                   break
+               else:
+                   current_page += 1
+
+elif b == 20:
+   d = bleng.__len__()
+   for i in range(d):
+       if m == bleng[i][0]:
+           c = bleng[i][1]
+           book = open(c, "rb")
+           reader = PdfReader(book)
+           nums = len(reader.pages)
+           pg = int(input("Nhập trang bạn muốn bắt đầu đọc: "))
+           current_page = pg - 1
+
+           while current_page < nums:
+               page = reader.pages[current_page]
+               text = page.extract_text()
+               bot.say(text)
+               bot.runAndWait()
+               stp = int(input("Muốn dừng đọc thì nhấn số 0: "))
+               if stp == 0 or current_page == nums:
+                   bot.stop()
+                   break
+               else:
+                   current_page += 1
+
+
